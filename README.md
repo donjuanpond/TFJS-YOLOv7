@@ -2,24 +2,14 @@
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
 [![](https://ga4gh.datainsights.cloud/api?repo=tfjs-cv-objectdetection)](https://github.com/SaschaDittmann/gaforgithub)
 
-# TensorFlow.js Example: Using an Azure Custom Vision Object Detection model to detect Logos in a web browser
+# TensorFlow.js Example: Using YOLOv7 base model, trained on general data.
 
-This example shows you how to use a Machine Learning, which was created with the [Microsoft Azure Custom Vision](https://azure.microsoft.com/en-us/services/cognitive-services/custom-vision-service/) service, in a web browser application.
-
-The [Azure Logo images](https://github.com/microsoft/AIVisualProvision/tree/master/Documents/Images/Training_DataSet) used in this example, are from the AI Vision Provision demo shown at the Microsoft Connect() event in 2018 and are not published with this repository.
-
-## About
-
-For more details about this project, please checkout my [YouTube Video](https://www.youtube.com/watch?v=7gOYpT732ow&list=PLZk8J6FocZbaClHkIPk4SWZHxn_9VArb5&index=2):
-
-[![Watch the video](https://img.youtube.com/vi/7gOYpT732ow/maxresdefault.jpg)](https://www.youtube.com/watch?v=7gOYpT732ow&list=PLZk8J6FocZbaClHkIPk4SWZHxn_9VArb5&index=2)
+This tutorial uses a lot of code from https://github.com/SaschaDittmann/tfjs-cv-objectdetection and is basically a fork of that (making a new repo so that uploading files is easier). That code is all used for the basic website layout, and all the code for decoding the actual YOLOv7 model output into an image with masks is from here: https://github.com/hugozanini/yolov7-tfjs/. I also used this repo's model files as they were already converted conveniently into the correct format.
 
 ## Setup 
 
 Prepare the node environments:
 ```sh
-$ npm install
-# Or
 $ yarn
 ```
 
@@ -28,6 +18,8 @@ Run the local web server script:
 $ node server.js
 ```
 
-## Demo
-
-If you wan't, you can test the deployed application under under [https://tfjs-objectdetection.azureedge.net](https://tfjs-objectdetection.azureedge.net).
+Then, to get a URL to the port this has ran the server on, install localtunnel and use it:
+```sh
+$ npm install -g localtunnel
+$ lt --port 3000
+```
