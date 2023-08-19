@@ -17,7 +17,22 @@ export const renderBoxes = (back_img, threshold, boxes_data, scores_data, classe
   ctx.canvas.height=640
 
   ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height); // clean canvas
-  ctx.drawImage(back_img, 0, 0, 640, 640)
+
+  var dx=0, dy=0, dWidth=0, dHeight=0;
+  if (back_img.height >= back_img.width) {     // if its a tall image
+    dWidth = (640 * back_img.width) / back_img.height
+    dx = Math.floor((640-dWidth)/2)
+    dy = 0
+    dHeight = 640
+  } else {									// if its a wide image
+    dHeight = (640 * back_img.height) / back_img.width
+    dx = 0
+    dy = Math.floor((640-dHeight)/2)
+    dWidth = 640
+  }
+  console.log(dx, dy, dWidth, dHeight, back_img.width, back_img.height)
+  ctx.drawImage(back_img, dx, dy, dWidth, dHeight)
+
   // font configs
   const font = "18px sans-serif";
   ctx.font = font;
