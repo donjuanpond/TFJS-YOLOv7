@@ -5,25 +5,81 @@ $("#image-selector").change(function () {
 	let reader = new FileReader();
 	reader.onload = function () {
 		let dataURL = reader.result;
-		$("#selectedImage").attr("src", dataURL);
+		const back_img = new Image();
+		back_img.src = dataURL
+		setTimeout(function () {
+			console.log(back_img.height, back_img.width)
+			let c = document.createElement('canvas')
+			c.height = 640, c.width = 640
+			const ctx = c.getContext('2d')
+
+			var dx=0, dy=0, dWidth=0, dHeight=0;
+			if (back_img.height >= back_img.width) {     // if its a tall image
+				dWidth = (640 * back_img.width) / back_img.height
+				dx = Math.floor((640-dWidth)/2)
+				dy = 0
+				dHeight = 640
+			} else {									// if its a wide image
+				dHeight = (640 * back_img.height) / back_img.width
+				dx = 0
+				dy = Math.floor((640-dHeight)/2)
+				dWidth = 640
+			}
+			console.log(dx, dy, dWidth, dHeight, back_img.width, back_img.height)
+			ctx.drawImage(back_img, dx, dy, dWidth, dHeight)
+			
+			$("#selectedImage").attr("src", c.toDataURL());
+		},100)
+		
+		
 	}
-	
 	let file = $("#image-selector").prop('files')[0];
 	reader.readAsDataURL(file);
 });
 
+
 $("#webcam-capture-button").click(async function () {
 	const webcamElement = document.getElementById("webcam")
 	const webcam = await tf.data.webcam(webcamElement) 
-
-	const v = document.querySelector('video')
+	
 	let c = document.createElement('canvas')
+	const v = document.querySelector('video')
 	c.height = v.videoHeight || parseInt(v.style.height)
 	c.width = v.videoWidth || parseInt(v.style.width)
 	const ctx = c.getContext('2d')
 	ctx.drawImage(v, 0, 0)
 
-	$("#selectedImage").attr("src", c.toDataURL());
+	const back_img = new Image();
+	back_img.onload = function() {
+		console.log('loaded - ', this.height, this.width)
+	}
+	back_img.src = c.toDataURL()
+	console.log(back_img.src)
+	
+	setTimeout(function () {
+		console.log(back_img.height, back_img.width)
+		let c = document.createElement('canvas')
+		c.height = 640, c.width = 640
+		const ctx = c.getContext('2d')
+
+		var dx=0, dy=0, dWidth=0, dHeight=0;
+		if (back_img.height >= back_img.width) {     // if its a tall image
+			dWidth = (640 * back_img.width) / back_img.height
+			dx = Math.floor((640-dWidth)/2)
+			dy = 0
+			dHeight = 640
+		} else {									// if its a wide image
+			dHeight = (640 * back_img.height) / back_img.width
+			dx = 0
+			dy = Math.floor((640-dHeight)/2)
+			dWidth = 640
+		}
+		console.log(dx, dy, dWidth, dHeight, back_img.width, back_img.height)
+		ctx.drawImage(back_img, dx, dy, dWidth, dHeight)
+		
+		$("#selectedImage").attr("src", c.toDataURL());
+	}, 100)
+
 });
 
 function showProgress(percentage) {
@@ -35,6 +91,8 @@ function showProgress(percentage) {
 
 let model;
 $( document ).ready(async function () {
+	tf.setBackend('webgl')
+	console.log("backend: ", tf.getBackend())
 	$('.progress-bar').html("Loading Model");
 	$('.progress-bar').show();
     console.log( "Loading model..." );
